@@ -1,0 +1,1 @@
+tar -cvf SemicolonBotz.tar SemicolonBotz.jar www\*

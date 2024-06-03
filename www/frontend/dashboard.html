@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bot Dashboard</title>
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Reddit+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="container">
+        <div id="header">Crisenpuer HUB</div>
+        <div id="navmap"><iframe src="https://discord.com/widget?id=1221859450277597244&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe></div>
+        <div id="content">
+            <h1>Welcome to the Bot Dashboard</h1>
+            <form id="config-form">
+                <label for="prefix">Command Prefix:</label>
+                <input type="text" id="prefix" name="prefix">
+                <button type="submit">Save Configuration</button>
+            </form>
+        <div id="acc"></div>
+        <div id="footer">crisenpuer.pl.eu.org 2024 &copy; All rights reserved.</div>
+    </div>
+
+    <script>
+        async function getUserInfo() {
+            const response = await fetch('/api/user');
+            if (response.status === 401) {
+                window.location.href = '/login';
+            } else {
+                const user = await response.json();
+                document.getElementById('acc').innerText = `${user.username}#${user.discriminator}`;
+            }
+        }
+
+        async function updateConfig(event) {
+            event.preventDefault();
+            const prefix = document.getElementById('prefix').value;
+            await fetch('/api/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prefix })
+            });
+            alert('Configuration updated!');
+        }
+
+        document.getElementById('config-form').addEventListener('submit', updateConfig);
+
+        getUserInfo();
+        </script>
+</body>
+</html>
